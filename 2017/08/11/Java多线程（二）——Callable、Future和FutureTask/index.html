@@ -88,7 +88,7 @@
 <meta property="og:description" content="在上一章节我们介绍了Java实现多线程最常用的两种方式，但是那两种方式实现线程的时候并不能返回线程的执行结果。然而有些场景我们需要得到线程的执行结果，比如要计算每个部门的这个月的工资，然后进行总计（假设有n个部门，计算每个部门的工资需要花费m个小时，计算总计需要k个小时）。那么有以下两种方案供选择“：  n个部门工资计算和总计都安排给一个人来做，需要花费n*m+k小时； 每个部门工资计算都分别安排">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img-blog.csdn.net/20170811160555086?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2019-01-06T08:16:20.258Z">
+<meta property="og:updated_time" content="2019-01-06T08:55:44.797Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程（二）——Callable、Future和FutureTask">
 <meta name="twitter:description" content="在上一章节我们介绍了Java实现多线程最常用的两种方式，但是那两种方式实现线程的时候并不能返回线程的执行结果。然而有些场景我们需要得到线程的执行结果，比如要计算每个部门的这个月的工资，然后进行总计（假设有n个部门，计算每个部门的工资需要花费m个小时，计算总计需要k个小时）。那么有以下两种方案供选择“：  n个部门工资计算和总计都安排给一个人来做，需要花费n*m+k小时； 每个部门工资计算都分别安排">
@@ -392,7 +392,7 @@
 <li>每个部门工资计算都分别安排给一个人来做（同时进行），最后一个人做统计工作，那么需要花费m+k小时即可；</li>
 </ol>
 <p>方案一采用顺序执行的方式来做，需要花费的时间比较长；方案二采用执行并行的方式来做，在短时间内会花费更多的资源，但是节省了时间。方案一比较简单，在这里就不多赘述。让我们看下如何使用多线程的方式来实现方案二。</p>
-<p>方案二的实现其实也很简单，无法是在多线程的基础上加上线程执行结果返回，Java中提供了Callable、Future和FutrueTask相关工具来协助我们实现，接下来就看下是如何实现的吧！</p>
+<p>方案二的实现其实也很简单，无法是在多线程的基础上加上线程执行结果返回，Java中提供了Callable、Future和FutrueTask相关工具来协助我们实现，接下来就看下是如何实现的吧！<br><a id="more"></a></p>
 <ul>
 <li>Callable+Future实现：</li>
 </ul>

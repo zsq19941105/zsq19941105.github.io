@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img-blog.csdn.net/20170813173108593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="https://img-blog.csdn.net/20170813175727544?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2019-01-06T08:27:00.815Z">
+<meta property="og:updated_time" content="2019-01-06T08:56:00.264Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程（三）——手动实现Future模式">
 <meta name="twitter:description" content="在上一章节中向大家介绍了Java为我们提供的Future工具，为了深入了解此模式，本章节将带大家手动来实现future模式。 future模式：使用多线程的目的是为了充分利用计算机资源，来减少处理时间，这必然导致多线程的执行是异步的。然而很多场景下我们需要得到线程执行结果，那么如何来实现呢？future模式提供给我们一种方案，即客户端发送请求，服务端线程启动后就直接返回结果data（并没有真正的结">
@@ -393,7 +393,7 @@
 <li>序列图：</li>
 </ul>
 <p><img src="https://img-blog.csdn.net/20170813173108593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>如果大家感觉这么描述还不够清晰，那么让我们看下到底是如何实现的吧！</p>
+<p>如果大家感觉这么描述还不够清晰，那么让我们看下到底是如何实现的吧！<br><a id="more"></a></p>
 <ul>
 <li>首先，我们需要一个Data类来存放线程执行返回的结果：</li>
 </ul>

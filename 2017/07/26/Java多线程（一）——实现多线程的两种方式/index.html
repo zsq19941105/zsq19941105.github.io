@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Cherish的博客">
 <meta property="og:description" content="java实现多线程的常用方式有两种：继承Thread类、实现Runnable接口实现run方法。  继承Thread实现方式：  1234567891011121314151617public class ThreadTest extends Thread&amp;#123;		private int ticket = 100;		public void run() &amp;#123;		while(ticke">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-06T08:17:24.990Z">
+<meta property="og:updated_time" content="2019-01-06T08:56:33.578Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程（一）——实现多线程的两种方式">
 <meta name="twitter:description" content="java实现多线程的常用方式有两种：继承Thread类、实现Runnable接口实现run方法。  继承Thread实现方式：  1234567891011121314151617public class ThreadTest extends Thread&amp;#123;		private int ticket = 100;		public void run() &amp;#123;		while(ticke">
@@ -389,6 +389,7 @@
 <li>继承Thread实现方式：</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class ThreadTest extends Thread&#123;</span><br><span class="line">	</span><br><span class="line">	private int ticket = 100;</span><br><span class="line">	</span><br><span class="line">	public void run() &#123;</span><br><span class="line">		while(ticket &gt; 0)&#123;</span><br><span class="line">			ticket--;</span><br><span class="line">			System.out.println(Thread.currentThread().getName()+&quot;tickets:&quot;+ticket);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		ThreadTest threadTest = new ThreadTest();</span><br><span class="line">		threadTest.start();</span><br><span class="line">		System.out.println(&quot;主线程执行结束！&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <ul>
 <li>实现Runnable实现方式：</li>
 </ul>
