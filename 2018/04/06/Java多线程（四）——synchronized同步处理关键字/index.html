@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Java多线程,">
 
 
 
@@ -79,13 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Cherish的博客">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta name="description" content="这段时间事情比较多，终于闲下来有时间继续来完成Java多线程系列的文章。多线程是很多初级开发人员惧怕的内容，我不断尝试各种学习方法去来深刻理解多线程的相关知识，但是有关多线程编程的书籍大部分更偏理论，对于我们这些初级开发人员来说只能是越看越逃避，所以我决心把我所了解的相关Java多线程的知识点总结分享出来，可能这些内容不能适合每个读者，但是对大家有一点帮助我都会继续坚持下去。  多线程带来的问题多">
+<meta name="keywords" content="Java多线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java多线程（四）——synchronized同步处理关键字">
+<meta property="og:url" content="http://yoursite.com/2018/04/06/Java多线程（四）——synchronized同步处理关键字/index.html">
 <meta property="og:site_name" content="Cherish的博客">
+<meta property="og:description" content="这段时间事情比较多，终于闲下来有时间继续来完成Java多线程系列的文章。多线程是很多初级开发人员惧怕的内容，我不断尝试各种学习方法去来深刻理解多线程的相关知识，但是有关多线程编程的书籍大部分更偏理论，对于我们这些初级开发人员来说只能是越看越逃避，所以我决心把我所了解的相关Java多线程的知识点总结分享出来，可能这些内容不能适合每个读者，但是对大家有一点帮助我都会继续坚持下去。  多线程带来的问题多">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-06T07:57:21.372Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cherish的博客">
+<meta name="twitter:title" content="Java多线程（四）——synchronized同步处理关键字">
+<meta name="twitter:description" content="这段时间事情比较多，终于闲下来有时间继续来完成Java多线程系列的文章。多线程是很多初级开发人员惧怕的内容，我不断尝试各种学习方法去来深刻理解多线程的相关知识，但是有关多线程编程的书籍大部分更偏理论，对于我们这些初级开发人员来说只能是越看越逃避，所以我决心把我所了解的相关Java多线程的知识点总结分享出来，可能这些内容不能适合每个读者，但是对大家有一点帮助我都会继续坚持下去。  多线程带来的问题多">
 
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/">
+  <link rel="canonical" href="http://yoursite.com/2018/04/06/Java多线程（四）——synchronized同步处理关键字/">
 
 
 
 
 
-  <title>归档 | Cherish的博客</title>
+  <title>Java多线程（四）——synchronized同步处理关键字 | Cherish的博客</title>
   
 
 
@@ -140,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -266,327 +271,195 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/06/Java多线程（四）——synchronized同步处理关键字/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Cherish">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cherish的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">Java多线程（四）——synchronized同步处理关键字</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-06T15:49:00+08:00">
+                2018-04-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 8 篇日志。 继续努力。
-      </span>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">Java多线程</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/01/06/Integer实现原理及缓存机制/" itemprop="url">
-              
-                <span itemprop="name">Integer实现原理及缓存机制</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-06T15:26:00+08:00" content="2019-01-06">
-          01-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/06/Java多线程（四）——synchronized同步处理关键字/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（四）——synchronized同步处理关键字</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-06T15:49:00+08:00" content="2018-04-06">
-          04-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/06/Spring实现统一捕获接口层异常与邮件警报/" itemprop="url">
-              
-                <span itemprop="name">Spring实现统一捕获接口层异常与邮件警报</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-01-06T15:33:00+08:00" content="2018-01-06">
-          01-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/06/Java多线程（四）——synchronized同步处理关键字/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/06/Java多线程（四）——synchronized同步处理关键字/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
-          </div>
-        
-        
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/13/Java多线程（三）——手动实现Future模式/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（三）——手动实现Future模式</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-08-13T15:53:00+08:00" content="2017-08-13">
-          08-13
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/11/Java多线程（二）——Callable、Future和FutureTask/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（二）——Callable、Future和FutureTask</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-08-11T16:14:00+08:00" content="2017-08-11">
-          08-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/26/Java多线程（一）——实现多线程的两种方式/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（一）——实现多线程的两种方式</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-07-26T16:16:00+08:00" content="2017-07-26">
-          07-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>这段时间事情比较多，终于闲下来有时间继续来完成Java多线程系列的文章。多线程是很多初级开发人员惧怕的内容，我不断尝试各种学习方法去来深刻理解多线程的相关知识，但是有关多线程编程的书籍大部分更偏理论，对于我们这些初级开发人员来说只能是越看越逃避，所以我决心把我所了解的相关Java多线程的知识点总结分享出来，可能这些内容不能适合每个读者，但是对大家有一点帮助我都会继续坚持下去。</p>
+<ul>
+<li>多线程带来的问题<br>多线程的存在大大提高了程序对计算机的利用率，随之而来的却是开发上的不便以及调试的难度。为什么这么说呢？大家都知道，多个线程同时执行无法避免对相同资源的竞争，这种竞争的结果一般是不可预期的。如果想让多个线程同时执行并且按照我们开发人员所规定的去执行，那就需要一些东西来约束它。当然，这也是笔者认为多线程最重要，最难的一个点。</li>
+<li>synchronized同步关键字<br>synchronized是java提供的一个同步处理的关键字，可以保证同一时刻只有一个线程能够进入该方法（代码块）。synchronized有三种使用方式：<strong>修饰实例方法、修饰静态方法、同步代码块</strong>。</li>
+</ul>
+<p> synchronized修饰实例方法：<br> 修饰实例方法是对象级锁，多个线程执行同一个对象中被 synchronized的方法时同时只有一个线程能够获取对象锁，执行方法，其他线程等待。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class ThreadTest implements Runnable&#123;</span><br><span class="line"></span><br><span class="line">    public static int i = 0;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * synchronized 修饰实例方法</span><br><span class="line">     */</span><br><span class="line">    public synchronized void increase()&#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        for(int j=0;j&lt;1000000;j++)&#123;</span><br><span class="line">            increase();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String []args) throws Exception&#123;</span><br><span class="line">        ThreadTest instance=new ThreadTest();</span><br><span class="line">        Thread t1=new Thread(instance);</span><br><span class="line">        Thread t2=new Thread(instance);</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t1.join();</span><br><span class="line">        t2.join();</span><br><span class="line">        System.out.println(ThreadTest.i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">结果为2000000</span><br></pre></td></tr></table></figure></p>
+<p>i++并不是原子操作，而是首先读取i，然后进行++，最后将算出的值赋值给i，所以当多个线程同时进行i++操作时结果是不预期的，我们这里通过synchronized修饰increase方法保证increase方法的原子性，从而保证某个线程在进行i++操作的时候，其他线程是无法进行i++操作的。</p>
+<p> synchronized修饰静态方法：<br>  修饰静态方法是当前类class对象锁，多个线程执行同一类中被 synchronized的静态方法时同时只有一个线程能够获取当前类的class对象锁，执行方法，其他线程等待。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">class ThreadTest implements Runnable&#123;</span><br><span class="line"></span><br><span class="line">    public static int i = 0;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * synchronized 修饰实例方法 这里将方法修改为了static方法</span><br><span class="line">     */</span><br><span class="line">    public static synchronized void increase()&#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        for(int j=0;j&lt;1000000;j++)&#123;</span><br><span class="line">            increase();//这里调用的方法是属于ThreadTest类的静态方法</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String []args) throws Exception&#123;</span><br><span class="line">        ThreadTest instance=new ThreadTest();</span><br><span class="line">        Thread t1=new Thread(instance);</span><br><span class="line">        Thread t2=new Thread(instance);</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t1.join();</span><br><span class="line">        t2.join();</span><br><span class="line">        System.out.println(ThreadTest.i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">结果还是为2000000</span><br></pre></td></tr></table></figure>
+<p> synchronized修饰同步代码块：<br>  修饰同步代码块是对代码块括号中的对象进行锁定，多个线程执行同一个被 synchronized的同步代码块时同时只有一个线程能够获取代码块括号中的对象锁，执行代码块内容，其他线程等待。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class ThreadTest implements Runnable&#123;</span><br><span class="line"></span><br><span class="line">    public static int i = 0;</span><br><span class="line">    public static int y = 0;</span><br><span class="line"></span><br><span class="line">    public Object lock = new Object();</span><br><span class="line">    /**</span><br><span class="line">     * synchronized 修饰实例方法</span><br><span class="line">     */</span><br><span class="line">    public void increase()&#123;</span><br><span class="line">        y++;//未被同步修饰，线程不安全</span><br><span class="line">        synchronized (lock)&#123;//lock为代码块对象锁</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        for(int j=0;j&lt;1000000;j++)&#123;</span><br><span class="line">            increase();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String []args) throws Exception&#123;</span><br><span class="line">        ThreadTest instance=new ThreadTest();</span><br><span class="line">        Thread t1=new Thread(instance);</span><br><span class="line">        Thread t2=new Thread(instance);</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t1.join();</span><br><span class="line">        t2.join();</span><br><span class="line">        System.out.println(&quot;x=&quot;+ThreadTest.i);</span><br><span class="line">        System.out.println(&quot;y=&quot;+ThreadTest.y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">结果：</span><br><span class="line">x=2000000</span><br><span class="line">y=1999465</span><br></pre></td></tr></table></figure>
+<p>由结果可知，被synchronized修饰的代码块保证了多线程通知访问同时只有一个线程能够进入代码块中，保证了i被多线程处理的安全，y则在多线程处理过程中出现了不可预期的结果。</p>
+<p>总结归纳：synchronized虽然有3种使用方式，但是总的来说synchronized都是控制对象的lock和unlock操作。一个线程取得被synchronized修饰的方法（实例或者静态）/代码块的执行资源时，控制的对象进行被锁定，然后执行具体内容，结束时对象解锁，其他线程即可竞争从而执行相关方法/代码块。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/21/Mybatis-Generator-使用（Maven插件）/" itemprop="url">
-              
-                <span itemprop="name">Mybatis Generator 使用（Maven插件）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-21T16:27:00+08:00" content="2017-06-21">
-          06-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/19/工具类（一）-微信工具类/" itemprop="url">
-              
-                <span itemprop="name">工具类（一）-----微信工具类</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-19T16:29:00+08:00" content="2017-06-19">
-          06-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java多线程/" rel="tag"># Java多线程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/06/Spring实现统一捕获接口层异常与邮件警报/" rel="next" title="Spring实现统一捕获接口层异常与邮件警报">
+                <i class="fa fa-chevron-left"></i> Spring实现统一捕获接口层异常与邮件警报
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/06/Integer实现原理及缓存机制/" rel="prev" title="Integer实现原理及缓存机制">
+                Integer实现原理及缓存机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -594,6 +467,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -839,6 +726,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -856,6 +747,18 @@
       <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/04/06/Java多线程（四）——synchronized同步处理关键字/';
+          this.page.identifier = '2018/04/06/Java多线程（四）——synchronized同步处理关键字/';
+          this.page.title = 'Java多线程（四）——synchronized同步处理关键字';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   

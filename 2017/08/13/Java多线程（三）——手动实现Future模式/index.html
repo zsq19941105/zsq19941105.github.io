@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Java多线程,">
 
 
 
@@ -79,13 +79,21 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Cherish的博客">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta name="description" content="在上一章节中向大家介绍了Java为我们提供的Future工具，为了深入了解此模式，本章节将带大家手动来实现future模式。 future模式：使用多线程的目的是为了充分利用计算机资源，来减少处理时间，这必然导致多线程的执行是异步的。然而很多场景下我们需要得到线程执行结果，那么如何来实现呢？future模式提供给我们一种方案，即客户端发送请求，服务端线程启动后就直接返回结果data（并没有真正的结">
+<meta name="keywords" content="Java多线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java多线程（三）——手动实现Future模式">
+<meta property="og:url" content="http://yoursite.com/2017/08/13/Java多线程（三）——手动实现Future模式/index.html">
 <meta property="og:site_name" content="Cherish的博客">
+<meta property="og:description" content="在上一章节中向大家介绍了Java为我们提供的Future工具，为了深入了解此模式，本章节将带大家手动来实现future模式。 future模式：使用多线程的目的是为了充分利用计算机资源，来减少处理时间，这必然导致多线程的执行是异步的。然而很多场景下我们需要得到线程执行结果，那么如何来实现呢？future模式提供给我们一种方案，即客户端发送请求，服务端线程启动后就直接返回结果data（并没有真正的结">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img-blog.csdn.net/20170813173108593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://img-blog.csdn.net/20170813175727544?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2019-01-06T08:27:00.815Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cherish的博客">
+<meta name="twitter:title" content="Java多线程（三）——手动实现Future模式">
+<meta name="twitter:description" content="在上一章节中向大家介绍了Java为我们提供的Future工具，为了深入了解此模式，本章节将带大家手动来实现future模式。 future模式：使用多线程的目的是为了充分利用计算机资源，来减少处理时间，这必然导致多线程的执行是异步的。然而很多场景下我们需要得到线程执行结果，那么如何来实现呢？future模式提供给我们一种方案，即客户端发送请求，服务端线程启动后就直接返回结果data（并没有真正的结">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20170813173108593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
 
 
@@ -115,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/">
+  <link rel="canonical" href="http://yoursite.com/2017/08/13/Java多线程（三）——手动实现Future模式/">
 
 
 
 
 
-  <title>归档 | Cherish的博客</title>
+  <title>Java多线程（三）——手动实现Future模式 | Cherish的博客</title>
   
 
 
@@ -140,7 +148,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -266,327 +274,215 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/13/Java多线程（三）——手动实现Future模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Cherish">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cherish的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">Java多线程（三）——手动实现Future模式</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-13T15:53:00+08:00">
+                2017-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 8 篇日志。 继续努力。
-      </span>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">Java多线程</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/01/06/Integer实现原理及缓存机制/" itemprop="url">
-              
-                <span itemprop="name">Integer实现原理及缓存机制</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-06T15:26:00+08:00" content="2019-01-06">
-          01-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/06/Java多线程（四）——synchronized同步处理关键字/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（四）——synchronized同步处理关键字</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-06T15:49:00+08:00" content="2018-04-06">
-          04-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/06/Spring实现统一捕获接口层异常与邮件警报/" itemprop="url">
-              
-                <span itemprop="name">Spring实现统一捕获接口层异常与邮件警报</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-01-06T15:33:00+08:00" content="2018-01-06">
-          01-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/13/Java多线程（三）——手动实现Future模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/08/13/Java多线程（三）——手动实现Future模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
-          </div>
-        
-        
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/13/Java多线程（三）——手动实现Future模式/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（三）——手动实现Future模式</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-08-13T15:53:00+08:00" content="2017-08-13">
-          08-13
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/11/Java多线程（二）——Callable、Future和FutureTask/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（二）——Callable、Future和FutureTask</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-08-11T16:14:00+08:00" content="2017-08-11">
-          08-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/26/Java多线程（一）——实现多线程的两种方式/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（一）——实现多线程的两种方式</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-07-26T16:16:00+08:00" content="2017-07-26">
-          07-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>在上一章节中向大家介绍了Java为我们提供的Future工具，为了深入了解此模式，本章节将带大家手动来实现future模式。</p>
+<p>future模式：使用多线程的目的是为了充分利用计算机资源，来减少处理时间，这必然导致多线程的执行是异步的。然而很多场景下我们需要得到线程执行结果，那么如何来实现呢？future模式提供给我们一种方案，即客户端发送请求，服务端线程启动后就直接返回结果data（并没有真正的结果数据），等服务端处理完成后将线程执行结果放到结果data中，这样客户端即可获取线程执行结果。</p>
+<ul>
+<li>序列图：</li>
+</ul>
+<p><img src="https://img-blog.csdn.net/20170813173108593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>如果大家感觉这么描述还不够清晰，那么让我们看下到底是如何实现的吧！</p>
+<ul>
+<li>首先，我们需要一个Data类来存放线程执行返回的结果：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public class Data&lt;T&gt; &#123;</span><br><span class="line">	</span><br><span class="line">	//存储结果数据</span><br><span class="line">	private T data;</span><br><span class="line">	</span><br><span class="line">	//结果是否已经准备好</span><br><span class="line">	private boolean isReady = false;</span><br><span class="line"></span><br><span class="line">	public synchronized T getData() &#123;</span><br><span class="line">		if (!isReady) &#123;//结果还没获取到</span><br><span class="line">			try &#123;</span><br><span class="line">				this.wait();//等待获取结果</span><br><span class="line">			&#125; catch (InterruptedException e) &#123;			</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		return data;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public synchronized void setData(T data) &#123;</span><br><span class="line">		if(isReady)//已经设置了结果数据</span><br><span class="line">			return;</span><br><span class="line">		this.data = data;</span><br><span class="line">		this.isReady = true;</span><br><span class="line">		this.notifyAll();//通知其他线程执行 即通知客户端获取线程执行结果</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>实现一个Task类用于表示任务处理：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> public abstract class Task&lt;T&gt;&#123;	</span><br><span class="line">	public abstract  T call();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Random;</span><br><span class="line"></span><br><span class="line">public class SumTask extends Task&lt;Integer&gt;&#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public Integer call() &#123;</span><br><span class="line">		System.out.println(&quot;部门：&quot;+ Thread.currentThread().getId()+&quot;正在计算工资&quot;);</span><br><span class="line">		Random random = new Random();</span><br><span class="line">		try &#123;</span><br><span class="line">			Thread.sleep(2000);</span><br><span class="line">		&#125; catch (InterruptedException e) &#123;			</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;//模拟工资计算耗时</span><br><span class="line">		Integer sum = random.nextInt(100000);</span><br><span class="line">		System.out.println(&quot;部门：&quot;+ Thread.currentThread().getId()+&quot;计算完成。结果：&quot;+sum);</span><br><span class="line">		return sum;		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>实现一个Service来实现业务的处理：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class Service&lt;T&gt; implements Runnable&#123;</span><br><span class="line"></span><br><span class="line">	private Task&lt;T&gt; task;</span><br><span class="line">	</span><br><span class="line">	private Data&lt;T&gt; data  = new Data&lt;T&gt;();</span><br><span class="line">	</span><br><span class="line">	@Override</span><br><span class="line">	public void run() &#123;</span><br><span class="line">		T t = task.call();</span><br><span class="line">		data.setData(t);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public Data&lt;T&gt; submitTask(Task&lt;T&gt; task) &#123;</span><br><span class="line">		this.task = task;</span><br><span class="line">		new Thread(this).start();</span><br><span class="line">		return data;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>实现一个Main执行类模拟客户段请求：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public class Main &#123;	</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		long protime = System.currentTimeMillis();</span><br><span class="line">		</span><br><span class="line">		Service&lt;Integer&gt; service1 = new Service&lt;&gt;();</span><br><span class="line">		SumTask task1 = new SumTask();</span><br><span class="line">		Data&lt;Integer&gt; result1 = service1.submitTask(task1);</span><br><span class="line">		</span><br><span class="line">		Service&lt;Integer&gt; service2 = new Service&lt;&gt;();</span><br><span class="line">		SumTask task2 = new SumTask();</span><br><span class="line">		Data&lt;Integer&gt; result2 = service2.submitTask(task2);</span><br><span class="line">		</span><br><span class="line">		Service&lt;Integer&gt; service3 = new Service&lt;&gt;();</span><br><span class="line">		SumTask task3 = new SumTask();</span><br><span class="line">		Data&lt;Integer&gt; result3 = service3.submitTask(task3);</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		Integer sum = 0;</span><br><span class="line">	</span><br><span class="line">		sum += result1.getData();</span><br><span class="line">		sum += result2.getData();</span><br><span class="line">		sum += result3.getData();				</span><br><span class="line">		</span><br><span class="line">		long time = System.currentTimeMillis()-protime;</span><br><span class="line">		System.out.println(&quot;总计需发工资：&quot;+sum+&quot; 耗时：&quot;+time);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>执行结果：<br><img src="https://img-blog.csdn.net/20170813175727544?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>由结果分析，我们已经实现了future模式，接下来分析下代码中到底做了什么。</p>
+<ol>
+<li>首先Data类负责结果数据的接收，当真实结果数据未接收到的时候用getData方法将使主线程处于等待状态直到接收到真实结果数据。</li>
+<li>Task主要是实现了每个部门的工资的结算工作，并返回每个部门的工资总额。</li>
+<li>Service通过submitTask接收Task，并执行Task，返回执行结果。可以看到submitTask方法启动一个线程执行Task后，就直接返回一个结果（此时结果并没有真实的结果数据），等线程执行完将结果数据传递到data中，并唤醒其他线程（即Main中result.getData()来实现获取结果数据）。</li>
+<li>Main主要是提交任务，接收任务处理结果以及任务耗时和工资结算统计工作。</li>
+</ol>
+<p>细心的同学不难发现future模式跟生产者、消费者模式很类似，的确，future模式是生产者、消费者模式的扩展。其实在我们不断学习过程中会慢慢发现，很多看似高深的东西，也都是靠最基础的东西来实现和扩展的，只要基础打牢，在后续的学习将会简单很多。    本片文章到此也要结束了，后续还会对Java多线程方面的知识进行介绍以及总结，谢谢大家的支持！！！（文章中如有描述不明确或不正确的地方，欢迎大家批评指正，谢谢）。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/21/Mybatis-Generator-使用（Maven插件）/" itemprop="url">
-              
-                <span itemprop="name">Mybatis Generator 使用（Maven插件）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-21T16:27:00+08:00" content="2017-06-21">
-          06-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/19/工具类（一）-微信工具类/" itemprop="url">
-              
-                <span itemprop="name">工具类（一）-----微信工具类</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-19T16:29:00+08:00" content="2017-06-19">
-          06-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java多线程/" rel="tag"># Java多线程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/11/Java多线程（二）——Callable、Future和FutureTask/" rel="next" title="Java多线程（二）——Callable、Future和FutureTask">
+                <i class="fa fa-chevron-left"></i> Java多线程（二）——Callable、Future和FutureTask
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/06/Spring实现统一捕获接口层异常与邮件警报/" rel="prev" title="Spring实现统一捕获接口层异常与邮件警报">
+                Spring实现统一捕获接口层异常与邮件警报 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -594,6 +490,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -839,6 +749,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -856,6 +770,18 @@
       <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/08/13/Java多线程（三）——手动实现Future模式/';
+          this.page.identifier = '2017/08/13/Java多线程（三）——手动实现Future模式/';
+          this.page.title = 'Java多线程（三）——手动实现Future模式';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   

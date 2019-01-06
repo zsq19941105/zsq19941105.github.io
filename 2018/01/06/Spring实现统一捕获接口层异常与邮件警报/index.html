@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Java中提供的try{}catch{}finally{}来进行异常捕获，然后当系统业务复杂，代码量则多，为了排除系统错误，我们一般在接口层进行异常捕获，捕获到异常时打印日志，通过日志的方式来排除错误。系统越复杂，接口数量越多，如果我们对所有接口都try{}catch{}的话，那么工作量不仅会很大，以后系统维护难度也会变大。然后SpringMvc在框架层提供给了一种接口层统一处理异常的方法。  @">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring实现统一捕获接口层异常与邮件警报">
+<meta property="og:url" content="http://yoursite.com/2018/01/06/Spring实现统一捕获接口层异常与邮件警报/index.html">
+<meta property="og:site_name" content="Cherish的博客">
+<meta property="og:description" content="Java中提供的try{}catch{}finally{}来进行异常捕获，然后当系统业务复杂，代码量则多，为了排除系统错误，我们一般在接口层进行异常捕获，捕获到异常时打印日志，通过日志的方式来排除错误。系统越复杂，接口数量越多，如果我们对所有接口都try{}catch{}的话，那么工作量不仅会很大，以后系统维护难度也会变大。然后SpringMvc在框架层提供给了一种接口层统一处理异常的方法。  @">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-06T07:34:07.670Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring实现统一捕获接口层异常与邮件警报">
+<meta name="twitter:description" content="Java中提供的try{}catch{}finally{}来进行异常捕获，然后当系统业务复杂，代码量则多，为了排除系统错误，我们一般在接口层进行异常捕获，捕获到异常时打印日志，通过日志的方式来排除错误。系统越复杂，接口数量越多，如果我们对所有接口都try{}catch{}的话，那么工作量不仅会很大，以后系统维护难度也会变大。然后SpringMvc在框架层提供给了一种接口层统一处理异常的方法。  @">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/06/Spring实现统一捕获接口层异常与邮件警报/">
+
+
+
+
+
+  <title>Spring实现统一捕获接口层异常与邮件警报 | Cherish的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cherish的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/06/Spring实现统一捕获接口层异常与邮件警报/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Cherish">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cherish的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring实现统一捕获接口层异常与邮件警报</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-06T15:33:00+08:00">
+                2018-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/异常监控/" itemprop="url" rel="index">
+                    <span itemprop="name">异常监控</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/06/Spring实现统一捕获接口层异常与邮件警报/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/01/06/Spring实现统一捕获接口层异常与邮件警报/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Java中提供的<code>try{}catch{}finally{}</code>来进行异常捕获，然后当系统业务复杂，代码量则多，为了排除系统错误，我们一般在接口层进行异常捕获，捕获到异常时打印日志，通过日志的方式来排除错误。系统越复杂，接口数量越多，如果我们对所有接口都<code>try{}catch{}</code>的话，那么工作量不仅会很大，以后系统维护难度也会变大。然后SpringMvc在框架层提供给了一种接口层统一处理异常的方法。</p>
+<ul>
+<li>@ExceptionHandler：统一处理某一类异常，从而能够减少代码重复率和复杂度。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public abstract class AbstractController &#123;</span><br><span class="line"></span><br><span class="line">    protected Logger log = LoggerFactory.getLogger(this.getClass());</span><br><span class="line"></span><br><span class="line">    @ExceptionHandler</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public String handleException(HttpServletRequest request, HttpServletResponse response, Exception ex)&#123;</span><br><span class="line">        if(!(ex instanceof NoNeedHandlerException))&#123;</span><br><span class="line">            log.error(&quot;&#123;&#125;:\n接口参数：&#123;&#125;\n&#123;&#125;&quot;, request.getRequestURI(), JSONObject.toJSONString(request.getParameterMap()),CommonMail.getFromException(ex));</span><br><span class="line">            MonitorInfo monitorInfo = new MonitorInfo();</span><br><span class="line">            monitorInfo.setMethodName(request.getRequestURI());</span><br><span class="line">            monitorInfo.setParams(request.getParameterMap());</span><br><span class="line">            monitorInfo.setException(ex);</span><br><span class="line">            ExceptionMonitorHelper.monitor(monitorInfo);</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            log.info(&quot;&#123;&#125;:\n接口参数：&#123;&#125;\n&#123;&#125;&quot;, request.getRequestURI(), JSONObject.toJSONString(request.getParameterMap()), ex.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">        if (ex instanceof HandlerException)&#123;</span><br><span class="line">            HandlerException exception = (HandlerException)ex;</span><br><span class="line">            return FmtResult(false, exception.getExceptionCode(), exception.getMessage(), &quot;&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        return FmtResult(false, ResultCode.CODE_ERROR, ResultCode.ERROR_MESSAGE, &quot;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>只需要在handleException对异常进行进行处理即可，这样接口层的异常全部在这个地方统一处理，开发成本和维护成本大大减低。</p>
+<ul>
+<li>邮件监控与警报<br>对于一些异常信息，一般都是通过打印日志的方式来记录，通过日志的方式去追溯错误。但是日志很多（尤其是日志打印不规范），很难定位，日志的及时性差，并不能及时通知到开发和运维人员线上错误，尤其是一些线上严重bug。在这里可以通过邮件警报的方式来对系统进行监控。<br>具体实现如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * ZSQ 监控信息类</span><br><span class="line"> */</span><br><span class="line">public class MonitorInfo &#123;</span><br><span class="line"></span><br><span class="line">    private String methodName;</span><br><span class="line"></span><br><span class="line">    private Map&lt;String, ?&gt; params;</span><br><span class="line"></span><br><span class="line">    private Exception exception;</span><br><span class="line"></span><br><span class="line">    public String getMethodName() &#123;</span><br><span class="line">        return methodName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setMethodName(String methodName) &#123;</span><br><span class="line">        this.methodName = methodName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Map&lt;String, ?&gt; getParams() &#123;</span><br><span class="line">        return params;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setParams(Map&lt;String, ?&gt; params) &#123;</span><br><span class="line">        this.params = params;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Exception getException() &#123;</span><br><span class="line">        return exception;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setException(Exception exception) &#123;</span><br><span class="line">        this.exception = exception;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * ZSQ 2018年4月8日14:39:51</span><br><span class="line"> * 异常监控类</span><br><span class="line"> */</span><br><span class="line">public class ExceptionMonitorHelper &#123;</span><br><span class="line"></span><br><span class="line">    private static final Logger logger = LoggerFactory.getLogger(ExceptionMonitorHelper.class);</span><br><span class="line"></span><br><span class="line">    private static final LinkedBlockingQueue&lt;MonitorInfo&gt; queue = new LinkedBlockingQueue&lt;&gt;(0xfff8);</span><br><span class="line"></span><br><span class="line">    private Thread monitorThread;</span><br><span class="line"></span><br><span class="line">    private volatile boolean isStop = false;</span><br><span class="line"></span><br><span class="line">    public static String ENVIROMENT = null;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public void start()&#123;</span><br><span class="line">        monitorThread = new Thread(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                while (!isStop) &#123;</span><br><span class="line">                    try &#123;</span><br><span class="line">	                    //可以调用queue.drainTo来批量处理异常信息，提升读取速率，减少加锁和释放锁的次数</span><br><span class="line">                        MonitorInfo moniterInfo = queue.take();</span><br><span class="line">                        if (!(moniterInfo.getException() instanceof NoNeedHandlerException)) &#123;</span><br><span class="line">                            logger.debug(&quot;接口处理错误：&#123;&#125;，&#123;&#125;&quot;, JSONObject.toJSONString(moniterInfo), moniterInfo.getException());</span><br><span class="line">                            if (DEV_EMAILS != null) &#123;</span><br><span class="line">                                CommonMail.sendCodeWarnEmail(ENVIROMENT , moniterInfo, ExceptionLevel.SERIOUS);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; catch (Exception e) &#123;</span><br><span class="line">                        logger.error(&quot;exception monitor error &#123;&#125;&quot;, e);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        monitorThread.setDaemon(true);//设置为守护线程 主线程退出时即退出</span><br><span class="line">        monitorThread.start();</span><br><span class="line">        logger.info(&quot;exception monitor start&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void stop()&#123;</span><br><span class="line">        isStop = true;</span><br><span class="line">        monitorThread.interrupt();</span><br><span class="line">        try &#123;</span><br><span class="line">            monitorThread.join();</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            logger.error(e.getMessage(), e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void monitor(MonitorInfo failInfo)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            queue.put(failInfo);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            logger.error(&quot;exception monitor put error&#123;&#125;&quot;, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">/***</span><br><span class="line">邮件工具类</span><br><span class="line">**/</span><br><span class="line">public class CommonMail &#123;</span><br><span class="line">	private static final String NAME = &quot;网&quot;;</span><br><span class="line">    private static final String USERNAME = &quot;system@qq.com&quot;;</span><br><span class="line">    private static final String PASSWD = &quot;Qi123456&quot;;</span><br><span class="line">    private static String MAILHOST = &quot;smtp.exmail.qq.com&quot;;// 发送邮件的主机</span><br><span class="line">    private static int SMTPPORT = 465;</span><br><span class="line">    private static boolean TLS = true;</span><br><span class="line">    private static boolean DEBUG = true;</span><br><span class="line">    private static boolean SSL = true;</span><br><span class="line">    </span><br><span class="line">    //开发者邮箱配置</span><br><span class="line">    private static String DEV_USERNAME;</span><br><span class="line">    private static String DEV_PASSWD;</span><br><span class="line">    private static String DEV_NAME;</span><br><span class="line">    public static String []DEV_EMAILS;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        MAILHOST = ConfigPropertyConfigurer.getContextProperty(&quot;mail.mailhost&quot;) == null ? &quot;smtp.exmail.qq.com&quot; : ConfigPropertyConfigurer.getContextProperty(&quot;mail.mailhost&quot;);</span><br><span class="line">        SMTPPORT = ConfigPropertyConfigurer.getContextProperty(&quot;mail.smtpport&quot;) == null ? 465 : Integer.parseInt( ConfigPropertyConfigurer.getContextProperty(&quot;mail.smtpport&quot;));</span><br><span class="line">        TLS = ConfigPropertyConfigurer.getContextProperty(&quot;mail.tls&quot;) == null ? true : Boolean.parseBoolean(ConfigPropertyConfigurer.getContextProperty(&quot;mail.tls&quot;));</span><br><span class="line">        DEBUG = ConfigPropertyConfigurer.getContextProperty(&quot;mail.debug&quot;) == null ? false : Boolean.parseBoolean(ConfigPropertyConfigurer.getContextProperty(&quot;mail.debug&quot;));</span><br><span class="line">        SSL = ConfigPropertyConfigurer.getContextProperty(&quot;mail.ssl&quot;) == null ? false : Boolean.parseBoolean(ConfigPropertyConfigurer.getContextProperty(&quot;mail.ssl&quot;));</span><br><span class="line">        DEV_USERNAME = ConfigPropertyConfigurer.getContextProperty(&quot;dev.mail.username&quot;);</span><br><span class="line">        DEV_PASSWD = ConfigPropertyConfigurer.getContextProperty(&quot;dev.mail.password&quot;);</span><br><span class="line">        DEV_NAME = ConfigPropertyConfigurer.getContextProperty(&quot;dev.mail.name&quot;);</span><br><span class="line">        DEV_EMAILS = ConfigPropertyConfigurer.getContextProperty(&quot;dev.mail.receivers&quot;).split(&quot;,&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public static void sendDevEmail(String[] receivers, String subject, String msg)&#123;</span><br><span class="line">   	 System.setProperty(&quot;java.net.preferIPv4Stack&quot;, &quot;true&quot;);</span><br><span class="line">        final SimpleEmail email = new SimpleEmail();</span><br><span class="line">        email.setTLS(TLS);</span><br><span class="line">        email.setDebug(DEBUG);</span><br><span class="line">        email.setSSL(SSL);</span><br><span class="line">        email.setHostName(MAILHOST);</span><br><span class="line">        email.setSmtpPort(SMTPPORT);</span><br><span class="line">        email.setAuthenticator(new DefaultAuthenticator(DEV_USERNAME, DEV_PASSWD));</span><br><span class="line">        try &#123;</span><br><span class="line">            email.setFrom(DEV_USERNAME, DEV_NAME);</span><br><span class="line">            for(String receiver:receivers)&#123;</span><br><span class="line">           	 email.addTo(receiver);</span><br><span class="line">            &#125;            </span><br><span class="line">            email.setCharset(&quot;GB2312&quot;);</span><br><span class="line">            email.setSubject(subject);</span><br><span class="line">            email.setMsg(msg);</span><br><span class="line">            new Thread()&#123;			</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                	try &#123;</span><br><span class="line">						email.send();</span><br><span class="line">					&#125; catch (EmailException e) &#123;						</span><br><span class="line">						e.printStackTrace();</span><br><span class="line">					&#125;   </span><br><span class="line">                &#125; </span><br><span class="line">            &#125;.start();</span><br><span class="line">        &#125; catch (EmailException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">   &#125; </span><br><span class="line">    </span><br><span class="line">    public static void sendCodeWarnEmail(final String subject, final String msg, int type)&#123;    </span><br><span class="line">    	String sub = &quot;系统警报&quot;;</span><br><span class="line">        if(1 == type)&#123;</span><br><span class="line">            sub += &quot;严重错误&quot;;</span><br><span class="line">        &#125;else  if(2 == type)&#123;</span><br><span class="line">            sub += &quot;普通错误&quot;;</span><br><span class="line">        &#125;else  if(3 == type)&#123;</span><br><span class="line">            sub += &quot;非预期结果&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        sub += subject;</span><br><span class="line">        </span><br><span class="line">        final String tsub = sub;		</span><br><span class="line">        </span><br><span class="line">        sendDevEmail(DEV_EMAILS, tsub, msg);         </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void sendCodeWarnEmail(String enviroment, MonitorInfo monitorInfo, int type)&#123;</span><br><span class="line">        String subject = &quot;环境：&quot;+(StringUtils.isBlank(enviroment)?&quot;正式&quot;:enviroment)+&quot;\n&quot;+</span><br><span class="line">                &quot;方法名称：&quot;+monitorInfo.getMethodName();</span><br><span class="line"></span><br><span class="line">        String msg =&quot;方法参数：\n&quot;;</span><br><span class="line">        msg += (JSON.toJSON(monitorInfo.getParams())+&quot;\n&quot;);</span><br><span class="line">        msg += &quot;异常信息:\n&quot;;</span><br><span class="line">        msg += CommonMail.getFromException(monitorInfo.getException());</span><br><span class="line">        CommonMail.sendCodeWarnEmail(subject, msg, type);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public static String getFromException(Exception e)&#123;</span><br><span class="line">        StringWriter sw = new StringWriter();</span><br><span class="line">        e.printStackTrace(new PrintWriter(sw, true));</span><br><span class="line">        String str = sw.toString();</span><br><span class="line">        return  str;</span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>笔者只是抛砖引玉，大家有更好的方案或优化方法可以提出来，共同学习进步！！！Thank you！！！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/13/Java多线程（三）——手动实现Future模式/" rel="next" title="Java多线程（三）——手动实现Future模式">
+                <i class="fa fa-chevron-left"></i> Java多线程（三）——手动实现Future模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/06/Java多线程（四）——synchronized同步处理关键字/" rel="prev" title="Java多线程（四）——synchronized同步处理关键字">
+                Java多线程（四）——synchronized同步处理关键字 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Cherish">
+            
+              <p class="site-author-name" itemprop="name">Cherish</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/zsq19941105" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1024427093@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/u012999796" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-rss-square"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/u/5312219380" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cherish</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/01/06/Spring实现统一捕获接口层异常与邮件警报/';
+          this.page.identifier = '2018/01/06/Spring实现统一捕获接口层异常与邮件警报/';
+          this.page.title = 'Spring实现统一捕获接口层异常与邮件警报';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

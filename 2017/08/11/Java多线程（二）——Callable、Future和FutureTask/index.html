@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Java多线程,">
 
 
 
@@ -79,13 +79,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Cherish的博客">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta name="description" content="在上一章节我们介绍了Java实现多线程最常用的两种方式，但是那两种方式实现线程的时候并不能返回线程的执行结果。然而有些场景我们需要得到线程的执行结果，比如要计算每个部门的这个月的工资，然后进行总计（假设有n个部门，计算每个部门的工资需要花费m个小时，计算总计需要k个小时）。那么有以下两种方案供选择“：  n个部门工资计算和总计都安排给一个人来做，需要花费n*m+k小时； 每个部门工资计算都分别安排">
+<meta name="keywords" content="Java多线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java多线程（二）——Callable、Future和FutureTask">
+<meta property="og:url" content="http://yoursite.com/2017/08/11/Java多线程（二）——Callable、Future和FutureTask/index.html">
 <meta property="og:site_name" content="Cherish的博客">
+<meta property="og:description" content="在上一章节我们介绍了Java实现多线程最常用的两种方式，但是那两种方式实现线程的时候并不能返回线程的执行结果。然而有些场景我们需要得到线程的执行结果，比如要计算每个部门的这个月的工资，然后进行总计（假设有n个部门，计算每个部门的工资需要花费m个小时，计算总计需要k个小时）。那么有以下两种方案供选择“：  n个部门工资计算和总计都安排给一个人来做，需要花费n*m+k小时； 每个部门工资计算都分别安排">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img-blog.csdn.net/20170811160555086?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2019-01-06T08:16:20.258Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cherish的博客">
+<meta name="twitter:title" content="Java多线程（二）——Callable、Future和FutureTask">
+<meta name="twitter:description" content="在上一章节我们介绍了Java实现多线程最常用的两种方式，但是那两种方式实现线程的时候并不能返回线程的执行结果。然而有些场景我们需要得到线程的执行结果，比如要计算每个部门的这个月的工资，然后进行总计（假设有n个部门，计算每个部门的工资需要花费m个小时，计算总计需要k个小时）。那么有以下两种方案供选择“：  n个部门工资计算和总计都安排给一个人来做，需要花费n*m+k小时； 每个部门工资计算都分别安排">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20170811160555086?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
 
 
@@ -115,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/">
+  <link rel="canonical" href="http://yoursite.com/2017/08/11/Java多线程（二）——Callable、Future和FutureTask/">
 
 
 
 
 
-  <title>归档 | Cherish的博客</title>
+  <title>Java多线程（二）——Callable、Future和FutureTask | Cherish的博客</title>
   
 
 
@@ -140,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -266,327 +273,201 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/11/Java多线程（二）——Callable、Future和FutureTask/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Cherish">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cherish的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">Java多线程（二）——Callable、Future和FutureTask</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-11T16:14:00+08:00">
+                2017-08-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 8 篇日志。 继续努力。
-      </span>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">Java多线程</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/01/06/Integer实现原理及缓存机制/" itemprop="url">
-              
-                <span itemprop="name">Integer实现原理及缓存机制</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-06T15:26:00+08:00" content="2019-01-06">
-          01-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/04/06/Java多线程（四）——synchronized同步处理关键字/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（四）——synchronized同步处理关键字</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-06T15:49:00+08:00" content="2018-04-06">
-          04-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/06/Spring实现统一捕获接口层异常与邮件警报/" itemprop="url">
-              
-                <span itemprop="name">Spring实现统一捕获接口层异常与邮件警报</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-01-06T15:33:00+08:00" content="2018-01-06">
-          01-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/11/Java多线程（二）——Callable、Future和FutureTask/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/08/11/Java多线程（二）——Callable、Future和FutureTask/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
-          </div>
-        
-        
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/13/Java多线程（三）——手动实现Future模式/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（三）——手动实现Future模式</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-08-13T15:53:00+08:00" content="2017-08-13">
-          08-13
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/11/Java多线程（二）——Callable、Future和FutureTask/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（二）——Callable、Future和FutureTask</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-08-11T16:14:00+08:00" content="2017-08-11">
-          08-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/26/Java多线程（一）——实现多线程的两种方式/" itemprop="url">
-              
-                <span itemprop="name">Java多线程（一）——实现多线程的两种方式</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-07-26T16:16:00+08:00" content="2017-07-26">
-          07-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>在上一章节我们介绍了Java实现多线程最常用的两种方式，但是那两种方式实现线程的时候并不能返回线程的执行结果。然而有些场景我们需要得到线程的执行结果，比如要计算每个部门的这个月的工资，然后进行总计（假设有n个部门，计算每个部门的工资需要花费m个小时，计算总计需要k个小时）。那么有以下两种方案供选择“：</p>
+<ol>
+<li>n个部门工资计算和总计都安排给一个人来做，需要花费n*m+k小时；</li>
+<li>每个部门工资计算都分别安排给一个人来做（同时进行），最后一个人做统计工作，那么需要花费m+k小时即可；</li>
+</ol>
+<p>方案一采用顺序执行的方式来做，需要花费的时间比较长；方案二采用执行并行的方式来做，在短时间内会花费更多的资源，但是节省了时间。方案一比较简单，在这里就不多赘述。让我们看下如何使用多线程的方式来实现方案二。</p>
+<p>方案二的实现其实也很简单，无法是在多线程的基础上加上线程执行结果返回，Java中提供了Callable、Future和FutrueTask相关工具来协助我们实现，接下来就看下是如何实现的吧！</p>
+<ul>
+<li>Callable+Future实现：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//首先实现一个计算工资的Task类 并实现Callable接口 （线程返回结果类型即泛型填充类型）</span><br><span class="line"> public class Task implements Callable&lt;Integer&gt;&#123;</span><br><span class="line">	@Override</span><br><span class="line">	public Integer call() throws Exception &#123;</span><br><span class="line">		System.out.println(&quot;部门：&quot;+ Thread.currentThread().getId()+&quot;正在计算工资&quot;);</span><br><span class="line">		Random random = new Random();</span><br><span class="line">		Thread.sleep(2000);//模拟工资计算耗时</span><br><span class="line">		Integer sum = random.nextInt(100000);</span><br><span class="line">		System.out.println(&quot;部门：&quot;+ Thread.currentThread().getId()+&quot;计算完成。结果：&quot;+sum);</span><br><span class="line">		return sum;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">//执行任务计算Main</span><br><span class="line">public class Main &#123;</span><br><span class="line">	</span><br><span class="line">	public static void main(String []args)&#123;</span><br><span class="line">		//创建固定的线程数的线程池，不了解线程池的可以去了解下</span><br><span class="line">		ExecutorService pool = Executors.newFixedThreadPool(5);</span><br><span class="line">		</span><br><span class="line">		Task task1 = new Task();</span><br><span class="line">		Task task2 = new Task();</span><br><span class="line">		Task task3 = new Task();</span><br><span class="line">		Task task4 = new Task();</span><br><span class="line">		Task task5 = new Task();</span><br><span class="line">		</span><br><span class="line">		long protime = System.currentTimeMillis();</span><br><span class="line">		//将五个部门的工资计算交由线程池中的线程执行</span><br><span class="line">		Future&lt;Integer&gt; result1 = pool.submit(task1);</span><br><span class="line">		Future&lt;Integer&gt; result2 = pool.submit(task2);</span><br><span class="line">		Future&lt;Integer&gt; result3 = pool.submit(task3);</span><br><span class="line">		Future&lt;Integer&gt; result4 = pool.submit(task4);</span><br><span class="line">		Future&lt;Integer&gt; result5 = pool.submit(task5);</span><br><span class="line">		</span><br><span class="line">		Integer sum = 0;</span><br><span class="line">		//获取根据submit提交返回的类型为Future&lt;Integer&gt;类型的result获取线程执行结果（线程任务没执行完的话，在调用get方法的时会wait等待结果执行完成）</span><br><span class="line">		try &#123;</span><br><span class="line">			sum += result1.get();</span><br><span class="line">			sum += result2.get();</span><br><span class="line">			sum += result3.get();</span><br><span class="line">			sum += result4.get();</span><br><span class="line">			sum += result5.get();</span><br><span class="line">		&#125; catch (InterruptedException e)&#123; 		</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; catch (ExecutionException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		long time = System.currentTimeMillis()-protime;</span><br><span class="line">		System.out.println(&quot;总计需发工资：&quot;+sum+&quot; 耗时：&quot;+time);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Callable+FutureTask实现：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//首先实现一个计算工资的Task类 并实现Callable接口 （线程返回结果类型即泛型填充类型）</span><br><span class="line"> public class Task implements Callable&lt;Integer&gt;&#123;</span><br><span class="line">	@Override</span><br><span class="line">	public Integer call() throws Exception &#123;</span><br><span class="line">		System.out.println(&quot;部门：&quot;+ Thread.currentThread().getId()+&quot;正在计算工资&quot;);</span><br><span class="line">		Random random = new Random();</span><br><span class="line">		Thread.sleep(2000);//模拟工资计算耗时</span><br><span class="line">		Integer sum = random.nextInt(100000);</span><br><span class="line">		System.out.println(&quot;部门：&quot;+ Thread.currentThread().getId()+&quot;计算完成。结果：&quot;+sum);</span><br><span class="line">		return sum;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">public class Main &#123;</span><br><span class="line">	public static void main(String []args)&#123;</span><br><span class="line">		ExecutorService pool = Executors.newFixedThreadPool(5);</span><br><span class="line">		</span><br><span class="line">		/**</span><br><span class="line">		FutureTask实现了RunnableFuture接口， RunnableFuture接口实现Runnable和Future接口</span><br><span class="line">		FutureTask相当于线程和结果的结合</span><br><span class="line">		*/</span><br><span class="line">		FutureTask&lt;Integer&gt; futureTask1 = new FutureTask&lt;&gt;(new Task());</span><br><span class="line">		FutureTask&lt;Integer&gt; futureTask2 = new FutureTask&lt;&gt;(new Task());</span><br><span class="line">		FutureTask&lt;Integer&gt; futureTask3 = new FutureTask&lt;&gt;(new Task());</span><br><span class="line">		FutureTask&lt;Integer&gt; futureTask4 = new FutureTask&lt;&gt;(new Task());</span><br><span class="line">		FutureTask&lt;Integer&gt; futureTask5 = new FutureTask&lt;&gt;(new Task());</span><br><span class="line">		</span><br><span class="line">		long protime = System.currentTimeMillis();</span><br><span class="line">		pool.submit(futureTask1);</span><br><span class="line">		pool.submit(futureTask2);</span><br><span class="line">		pool.submit(futureTask3);</span><br><span class="line">		pool.submit(futureTask4);</span><br><span class="line">		pool.submit(futureTask5);</span><br><span class="line">		pool.shutdown();</span><br><span class="line">				</span><br><span class="line">		Integer sum = 0;</span><br><span class="line">		try &#123;</span><br><span class="line">			sum += futureTask1.get();</span><br><span class="line">			sum += futureTask2.get();</span><br><span class="line">			sum += futureTask3.get();</span><br><span class="line">			sum += futureTask4.get();</span><br><span class="line">			sum += futureTask5.get();</span><br><span class="line">		&#125; catch (InterruptedException e)&#123; 		</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; catch (ExecutionException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		long time = System.currentTimeMillis()-protime;</span><br><span class="line">		System.out.println(&quot;总计需发工资：&quot;+sum+&quot; 耗时：&quot;+time);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>两种方式实现的执行效果基本一样（排除随机等因素）：<br><img src="https://img-blog.csdn.net/20170811160555086?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk5OTc5Ng==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>由结果分析，5个线程同时执行，大概计算2s后，相继计算出结果结果，耗时大概2s。</p>
+<p>总结：<br>future模式在Java多线程的用处还是蛮大的，尤其是在做并行计算的场景下。Java为我们提供了相关工具，所以实现难度也不大，加以练习就会很容易掌握。但是为了深刻理解future模式以及实现原理，下一章节会来手动实现future模式，敬请期待！！！（文章中如有描述不明确或不正确的地方，欢迎大家批评指正，谢谢）。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/21/Mybatis-Generator-使用（Maven插件）/" itemprop="url">
-              
-                <span itemprop="name">Mybatis Generator 使用（Maven插件）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-21T16:27:00+08:00" content="2017-06-21">
-          06-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/19/工具类（一）-微信工具类/" itemprop="url">
-              
-                <span itemprop="name">工具类（一）-----微信工具类</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-19T16:29:00+08:00" content="2017-06-19">
-          06-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java多线程/" rel="tag"># Java多线程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/26/Java多线程（一）——实现多线程的两种方式/" rel="next" title="Java多线程（一）——实现多线程的两种方式">
+                <i class="fa fa-chevron-left"></i> Java多线程（一）——实现多线程的两种方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/13/Java多线程（三）——手动实现Future模式/" rel="prev" title="Java多线程（三）——手动实现Future模式">
+                Java多线程（三）——手动实现Future模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -594,6 +475,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -839,6 +734,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -856,6 +755,18 @@
       <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/08/11/Java多线程（二）——Callable、Future和FutureTask/';
+          this.page.identifier = '2017/08/11/Java多线程（二）——Callable、Future和FutureTask/';
+          this.page.title = 'Java多线程（二）——Callable、Future和FutureTask';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
